@@ -93,7 +93,7 @@ logger.info(f"✅ FastMCP server created")
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="20000000000000000",  # 0.02 tokens
+        amount="50000000000000000",  # 0.05 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -129,8 +129,7 @@ async def retrieves_detailed_information_about_a_specific_country(
         Note: 'context' parameter is auto-injected by MCP framework
     """
     # Payment already verified by @require_payment_for_tool decorator
-    # Get API key using helper (handles request.state fallback)
-    api_key = get_active_api_key(context)
+    # No authentication required for this API - api_key not needed
 
     try:
         url = f"https://date.nager.at/api/v3/CountryInfo/{countryCode}"
@@ -156,7 +155,7 @@ async def retrieves_detailed_information_about_a_specific_country(
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="20000000000000000",  # 0.02 tokens
+        amount="50000000000000000",  # 0.05 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -191,8 +190,7 @@ async def retrieve_the_complete_list_of_all_countries_supported_by_the_nagerdate
         Note: 'context' parameter is auto-injected by MCP framework
     """
     # Payment already verified by @require_payment_for_tool decorator
-    # Get API key using helper (handles request.state fallback)
-    api_key = get_active_api_key(context)
+    # No authentication required for this API - api_key not needed
 
     try:
         url = f"https://date.nager.at/api/v3/AvailableCountries"
@@ -218,7 +216,7 @@ async def retrieve_the_complete_list_of_all_countries_supported_by_the_nagerdate
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="20000000000000000",  # 0.02 tokens
+        amount="50000000000000000",  # 0.05 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -260,8 +258,7 @@ async def retrieve_all_long_weekends_for_a_given_country_and_year(
         Note: 'context' parameter is auto-injected by MCP framework
     """
     # Payment already verified by @require_payment_for_tool decorator
-    # Get API key using helper (handles request.state fallback)
-    api_key = get_active_api_key(context)
+    # No authentication required for this API - api_key not needed
 
     try:
         url = f"https://date.nager.at/api/v3/LongWeekend/{year}/{countryCode}"
@@ -291,7 +288,7 @@ async def retrieve_all_long_weekends_for_a_given_country_and_year(
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="20000000000000000",  # 0.02 tokens
+        amount="50000000000000000",  # 0.05 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -329,8 +326,7 @@ async def retrieve_the_list_of_all_public_holidays_for_the_specified_year_and_co
         Note: 'context' parameter is auto-injected by MCP framework
     """
     # Payment already verified by @require_payment_for_tool decorator
-    # Get API key using helper (handles request.state fallback)
-    api_key = get_active_api_key(context)
+    # No authentication required for this API - api_key not needed
 
     try:
         url = f"https://date.nager.at/api/v3/PublicHolidays/{year}/{countryCode}"
@@ -356,78 +352,7 @@ async def retrieve_the_list_of_all_public_holidays_for_the_specified_year_and_co
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="20000000000000000",  # 0.02 tokens
-        asset=TokenAsset(
-            address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
-            decimals=18,
-            network="sepolia",
-            eip712=EIP712Domain(
-                name="IATPWallet",
-                version="1"
-            )
-        )
-    ),
-    description="By default, the calculation is based on the curren"
-
-)
-async def determines_whether_today_is_a_public_holiday_in_the_specified_country_optionally_adjusted_by_a_utc_offset(
-    context: Context,
-    countryCode: str = "us",
-    countyCode: Optional[str] = None,
-    offset: int = 0
-) -> Dict[str, Any]:
-    """
-    By default, the calculation is based on the current UTC date. You may optionally provide a timezone offset to evaluate the holiday status relative to a different local timezone. This endpoint is optimized for simple command-line or automation workflows where only the HTTP status code is required ``` STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" https://date.nager.at/Api/v3/IsTodayPublicHoliday/AT) if [ $STATUSCODE -ne 200 ]; then # handle error fi ```
-
-    Generated from OpenAPI endpoint: GET /api/v3/IsTodayPublicHoliday/{countryCode}
-
-    Args:
-        context: MCP context (auto-injected by framework, not user-provided)
-        countryCode: A valid `ISO 3166-1 alpha-2` country code. (optional, default: "us") Examples: "UA"
-        countyCode: Optional. The subdivision code (e.g., state, province) to narrow the check. (optional)
-        offset: Optional. UTC timezone offset in hours (range: -12 to +12). (optional, default: 0)
-
-    Returns:
-        Dictionary with API response
-
-    Example Usage:
-        await determines_whether_today_is_a_public_holiday_in_the_specified_country_optionally_adjusted_by_a_utc_offset(countryCode="UA")
-
-        Note: 'context' parameter is auto-injected by MCP framework
-    """
-    # Payment already verified by @require_payment_for_tool decorator
-    # Get API key using helper (handles request.state fallback)
-    api_key = get_active_api_key(context)
-
-    try:
-        url = f"https://date.nager.at/api/v3/IsTodayPublicHoliday/{countryCode}"
-        params = {
-            "countyCode": countyCode,
-            "offset": offset
-        }
-        params = {k: v for k, v in params.items() if v is not None}
-        headers = {}
-        # No auth required for this API
-
-        response = requests.get(
-            url,
-            params=params,
-            headers=headers,
-            timeout=30
-        )
-        response.raise_for_status()
-
-        return response.json()
-
-    except Exception as e:
-        logger.error(f"Error in determines_whether_today_is_a_public_holiday_in_the_specified_country_optionally_adjusted_by_a_utc_offset: {e}")
-        return {"error": str(e), "endpoint": "/api/v3/IsTodayPublicHoliday/{countryCode}"}
-
-
-@mcp.tool()
-@require_payment_for_tool(
-    price=TokenAmount(
-        amount="20000000000000000",  # 0.02 tokens
+        amount="50000000000000000",  # 0.05 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -463,8 +388,7 @@ async def retrieve_all_upcoming_public_holidays_occurring_within_the_next_365_da
         Note: 'context' parameter is auto-injected by MCP framework
     """
     # Payment already verified by @require_payment_for_tool decorator
-    # Get API key using helper (handles request.state fallback)
-    api_key = get_active_api_key(context)
+    # No authentication required for this API - api_key not needed
 
     try:
         url = f"https://date.nager.at/api/v3/NextPublicHolidays/{countryCode}"
@@ -490,7 +414,7 @@ async def retrieve_all_upcoming_public_holidays_occurring_within_the_next_365_da
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="20000000000000000",  # 0.02 tokens
+        amount="50000000000000000",  # 0.05 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -525,8 +449,7 @@ async def retrieve_all_public_holidays_occurring_worldwide_within_the_next_7_day
         Note: 'context' parameter is auto-injected by MCP framework
     """
     # Payment already verified by @require_payment_for_tool decorator
-    # Get API key using helper (handles request.state fallback)
-    api_key = get_active_api_key(context)
+    # No authentication required for this API - api_key not needed
 
     try:
         url = f"https://date.nager.at/api/v3/NextPublicHolidaysWorldwide"
@@ -552,7 +475,7 @@ async def retrieve_all_public_holidays_occurring_worldwide_within_the_next_7_day
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="20000000000000000",  # 0.02 tokens
+        amount="50000000000000000",  # 0.05 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -587,8 +510,7 @@ async def retrieve_the_current_version_information_of_the_nagerdate_library(
         Note: 'context' parameter is auto-injected by MCP framework
     """
     # Payment already verified by @require_payment_for_tool decorator
-    # Get API key using helper (handles request.state fallback)
-    api_key = get_active_api_key(context)
+    # No authentication required for this API - api_key not needed
 
     try:
         url = f"https://date.nager.at/api/v3/Version"
@@ -683,6 +605,7 @@ def create_app_with_middleware():
         tool_payment_configs=tool_payment_configs,
         server_address=SERVER_ADDRESS,
         requires_auth=False,  # Only checks payment
+        internal_api_key=None,  # No API key needed for public APIs
         testing_mode=testing_mode,
         facilitator_url=facilitator_url,
         facilitator_api_key=os.getenv("D402_FACILITATOR_API_KEY"),
