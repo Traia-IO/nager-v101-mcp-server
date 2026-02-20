@@ -93,7 +93,7 @@ logger.info(f"✅ FastMCP server created")
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="50000000000000000",  # 0.05 tokens
+        amount="30000000000000000",  # 0.03 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -110,7 +110,7 @@ logger.info(f"✅ FastMCP server created")
 async def retrieves_detailed_information_about_a_specific_country(
     context: Context,
     countryCode: str = "us"
-) -> Dict[str, Any]:
+) -> Any:
     """
     Provide a valid `ISO 3166-1 alpha-2` country code to retrieve country metadata. The response includes commonly used and official country names, the assigned region, and if available neighboring countries based on geographical borders.
 
@@ -121,7 +121,7 @@ async def retrieves_detailed_information_about_a_specific_country(
         countryCode: The 2-letter ISO 3166-1 country code (e.g., "US", "GB"). (optional, default: "us")
 
     Returns:
-        Dictionary with API response
+        API response (dict, list, or other JSON type)
 
     Example Usage:
         await retrieves_detailed_information_about_a_specific_country(countryCode="us")
@@ -155,7 +155,7 @@ async def retrieves_detailed_information_about_a_specific_country(
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="50000000000000000",  # 0.05 tokens
+        amount="30000000000000000",  # 0.03 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -171,7 +171,7 @@ async def retrieves_detailed_information_about_a_specific_country(
 )
 async def retrieve_the_complete_list_of_all_countries_supported_by_the_nagerdate_api(
     context: Context
-) -> Dict[str, Any]:
+) -> Any:
     """
     This endpoint returns all countries for which public-holiday data is available. Each entry includes the country's name and ISO code.
 
@@ -182,7 +182,7 @@ async def retrieve_the_complete_list_of_all_countries_supported_by_the_nagerdate
 
 
     Returns:
-        Dictionary with API response
+        API response (dict, list, or other JSON type)
 
     Example Usage:
         await retrieve_the_complete_list_of_all_countries_supported_by_the_nagerdate_api()
@@ -216,7 +216,7 @@ async def retrieve_the_complete_list_of_all_countries_supported_by_the_nagerdate
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="50000000000000000",  # 0.05 tokens
+        amount="30000000000000000",  # 0.03 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -236,7 +236,7 @@ async def retrieve_all_long_weekends_for_a_given_country_and_year(
     countryCode: str = "us",
     availableBridgeDays: int = 1,
     subdivisionCode: Optional[str] = None
-) -> Dict[str, Any]:
+) -> Any:
     """
     A long weekend is calculated based on public holidays that create an extended break of at least three consecutive days. Optional bridge days-weekdays between a holiday and a weekend-can be included to identify potential extended leave opportunities.
 
@@ -250,7 +250,7 @@ async def retrieve_all_long_weekends_for_a_given_country_and_year(
         subdivisionCode: Narrow the calculation to a specific federal state, province, or subdivision (where supported). (optional)
 
     Returns:
-        Dictionary with API response
+        API response (dict, list, or other JSON type)
 
     Example Usage:
         await retrieve_all_long_weekends_for_a_given_country_and_year(year=2026, countryCode="us")
@@ -288,7 +288,7 @@ async def retrieve_all_long_weekends_for_a_given_country_and_year(
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="50000000000000000",  # 0.05 tokens
+        amount="30000000000000000",  # 0.03 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -306,7 +306,7 @@ async def retrieve_the_list_of_all_public_holidays_for_the_specified_year_and_co
     context: Context,
     year: int = 2026,
     countryCode: str = "us"
-) -> Dict[str, Any]:
+) -> Any:
     """
     This endpoint returns all officially recognized public holidays for the given country and year. Each holiday entry includes the local and English holiday names, information about whether the holiday applies nationally or only in specific subdivisions, and the associated holiday type classifications.
 
@@ -318,7 +318,7 @@ async def retrieve_the_list_of_all_public_holidays_for_the_specified_year_and_co
         countryCode: A valid `ISO 3166-1 alpha-2` country code. (optional, default: "us")
 
     Returns:
-        Dictionary with API response
+        API response (dict, list, or other JSON type)
 
     Example Usage:
         await retrieve_the_list_of_all_public_holidays_for_the_specified_year_and_country(year=2026, countryCode="us")
@@ -352,7 +352,77 @@ async def retrieve_the_list_of_all_public_holidays_for_the_specified_year_and_co
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="50000000000000000",  # 0.05 tokens
+        amount="30000000000000000",  # 0.03 tokens
+        asset=TokenAsset(
+            address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
+            decimals=18,
+            network="sepolia",
+            eip712=EIP712Domain(
+                name="IATPWallet",
+                version="1"
+            )
+        )
+    ),
+    description="By default, the calculation is based on the curren"
+
+)
+async def determines_whether_today_is_a_public_holiday_in_the_specified_country_optionally_adjusted_by_a_utc_offset(
+    context: Context,
+    countryCode: str = "us",
+    countyCode: Optional[str] = None,
+    offset: int = 0
+) -> Any:
+    """
+    By default, the calculation is based on the current UTC date. You may optionally provide a timezone offset to evaluate the holiday status relative to a different local timezone. This endpoint is optimized for simple command-line or automation workflows where only the HTTP status code is required ``` STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" https://date.nager.at/Api/v3/IsTodayPublicHoliday/AT) if [ $STATUSCODE -ne 200 ]; then # handle error fi ```
+
+    Generated from OpenAPI endpoint: GET /api/v3/IsTodayPublicHoliday/{countryCode}
+
+    Args:
+        context: MCP context (auto-injected by framework, not user-provided)
+        countryCode: A valid `ISO 3166-1 alpha-2` country code. (optional, default: "us")
+        countyCode: Optional. The subdivision code (e.g., state, province) to narrow the check. (optional)
+        offset: Optional. UTC timezone offset in hours (range: -12 to +12). (optional, default: 0)
+
+    Returns:
+        API response (dict, list, or other JSON type)
+
+    Example Usage:
+        await determines_whether_today_is_a_public_holiday_in_the_specified_country_optionally_adjusted_by_a_utc_offset(countryCode="us")
+
+        Note: 'context' parameter is auto-injected by MCP framework
+    """
+    # Payment already verified by @require_payment_for_tool decorator
+    # No authentication required for this API - api_key not needed
+
+    try:
+        url = f"https://date.nager.at/api/v3/IsTodayPublicHoliday/{countryCode}"
+        params = {
+            "countyCode": countyCode,
+            "offset": offset
+        }
+        params = {k: v for k, v in params.items() if v is not None}
+        headers = {}
+        # No auth required for this API
+
+        response = requests.get(
+            url,
+            params=params,
+            headers=headers,
+            timeout=30
+        )
+        response.raise_for_status()
+
+        return response.json()
+
+    except Exception as e:
+        logger.error(f"Error in determines_whether_today_is_a_public_holiday_in_the_specified_country_optionally_adjusted_by_a_utc_offset: {e}")
+        return {"error": str(e), "endpoint": "/api/v3/IsTodayPublicHoliday/{countryCode}"}
+
+
+@mcp.tool()
+@require_payment_for_tool(
+    price=TokenAmount(
+        amount="30000000000000000",  # 0.03 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -369,7 +439,7 @@ async def retrieve_the_list_of_all_public_holidays_for_the_specified_year_and_co
 async def retrieve_all_upcoming_public_holidays_occurring_within_the_next_365_days_for_a_given_country(
     context: Context,
     countryCode: str = "us"
-) -> Dict[str, Any]:
+) -> Any:
     """
     The list includes only future holidays relative to the current date and is useful for forecasting, event planning, and applications that provide forward-looking holiday insights.
 
@@ -380,7 +450,7 @@ async def retrieve_all_upcoming_public_holidays_occurring_within_the_next_365_da
         countryCode: A valid `ISO 3166-1 alpha-2` country code. (optional, default: "us")
 
     Returns:
-        Dictionary with API response
+        API response (dict, list, or other JSON type)
 
     Example Usage:
         await retrieve_all_upcoming_public_holidays_occurring_within_the_next_365_days_for_a_given_country(countryCode="us")
@@ -414,7 +484,7 @@ async def retrieve_all_upcoming_public_holidays_occurring_within_the_next_365_da
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="50000000000000000",  # 0.05 tokens
+        amount="30000000000000000",  # 0.03 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -430,7 +500,7 @@ async def retrieve_all_upcoming_public_holidays_occurring_within_the_next_365_da
 )
 async def retrieve_all_public_holidays_occurring_worldwide_within_the_next_7_days(
     context: Context
-) -> Dict[str, Any]:
+) -> Any:
     """
     This global endpoint aggregates upcoming holidays across all supported countries, enabling international systems to detect near-term events.
 
@@ -441,7 +511,7 @@ async def retrieve_all_public_holidays_occurring_worldwide_within_the_next_7_day
 
 
     Returns:
-        Dictionary with API response
+        API response (dict, list, or other JSON type)
 
     Example Usage:
         await retrieve_all_public_holidays_occurring_worldwide_within_the_next_7_days()
@@ -475,7 +545,7 @@ async def retrieve_all_public_holidays_occurring_worldwide_within_the_next_7_day
 @mcp.tool()
 @require_payment_for_tool(
     price=TokenAmount(
-        amount="50000000000000000",  # 0.05 tokens
+        amount="30000000000000000",  # 0.03 tokens
         asset=TokenAsset(
             address="0x3e17730bb2ca51a8D5deD7E44c003A2e95a4d822",
             decimals=18,
@@ -491,7 +561,7 @@ async def retrieve_all_public_holidays_occurring_worldwide_within_the_next_7_day
 )
 async def retrieve_the_current_version_information_of_the_nagerdate_library(
     context: Context
-) -> Dict[str, Any]:
+) -> Any:
     """
     This endpoint returns detailed version information about the Nager.Date implementation running on the server, including the exact NuGet package version used by the API.
 
@@ -502,7 +572,7 @@ async def retrieve_the_current_version_information_of_the_nagerdate_library(
 
 
     Returns:
-        Dictionary with API response
+        API response (dict, list, or other JSON type)
 
     Example Usage:
         await retrieve_the_current_version_information_of_the_nagerdate_library()

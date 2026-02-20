@@ -117,7 +117,7 @@ The `deployment_params.json` file contains the deployment configuration for this
   "github_url": "https://github.com/Traia-IO/nager-v101-mcp-server",
   "mcp_server": {
     "name": "nager-v101-mcp",
-    "description": "Nager mcp v101",
+    "description": "Date nager mcp v101",
     "server_type": "streamable-http",
 "capabilities": [
       // List all implemented tool names here
